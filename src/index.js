@@ -1,17 +1,62 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+// Importar módulo
+import React from "react";
+import ReactDom from "react-dom";
 
-ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
-  document.getElementById('root')
-);
+// Importar Css
+import "./style.css";
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
+// Importar o formulário
+import Formulario from "./Formulario";
+
+// Importar a Tabela
+import Tabela from "./tabela";
+
+// Componente
+class Principal extends React.Component{
+
+    // Construtor
+    constructor(props){
+        super(props);
+
+        this.state = {
+            nome : '',
+            idade : '',
+            vetor : []
+        }
+    }
+
+    // Função ao digitar (onChange)
+    aoDigitar = (campo) => {
+            this.setState({[campo.target.name] : campo.target.value});
+    }
+
+    // Função clique (onSubmit)
+    AoClicar = (botao) => {
+        botao.preventDefault();
+        var copiaVetor = [...this.state.vetor];
+
+        copiaVetor.push({
+            'nome' : this.state.nome,
+            'idade' : this.state.idade
+        });
+        this.setState({vetor : copiaVetor});
+
+        this.setState({
+            nome: '',
+            idade: ''
+        })
+    }
+
+    //Render
+    render(){
+        return(
+            <div>
+                <Formulario campoNome={this.state.nome} campoIdade={this.state.idade} funcaoBotao={this.AoClicar} funcaoCampo={this.aoDigitar} />
+                <Tabela dados={this.state.vetor} />
+            </div>
+        )
+    }
+}
+
+// Render
+ReactDom.render(<Principal />, document.getElementById('root'));
